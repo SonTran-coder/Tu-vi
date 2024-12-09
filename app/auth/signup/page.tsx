@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { DEFAULT_VALUES } from "./constants";
 import { signUpSchema } from "./signup.validation";
+import { signup } from "./actions";
 
 const SignUp = () => {
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -24,9 +25,16 @@ const SignUp = () => {
     defaultValues: DEFAULT_VALUES,
   });
 
+  const {
+    handleSubmit,
+    control,
+    formState: { isLoading, isValid },
+  } = form;
+
   function onSubmit(values: z.infer<typeof signUpSchema>) {
-    console.log(values);
+    signup(values);
   }
+
   return (
     <div className="flex flex-col items-center">
       <div className="max-w-5xl w-full h-[84px] flex items-center gap-2">
@@ -41,11 +49,11 @@ const SignUp = () => {
             <h1 className="font-semibold text-xl">Đăng ký</h1>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-[30px]"
               >
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
@@ -61,7 +69,7 @@ const SignUp = () => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>
@@ -78,7 +86,7 @@ const SignUp = () => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="re_password"
                   render={({ field }) => (
                     <FormItem>
@@ -94,7 +102,11 @@ const SignUp = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="bg-red-extra-dark h-10 w-full">
+                <Button
+                  type="submit"
+                  className="bg-red-extra-dark h-10 w-full"
+                  disabled={!isValid}
+                >
                   Đăng ký
                 </Button>
               </form>
