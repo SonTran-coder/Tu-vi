@@ -1,6 +1,6 @@
 "use client";
 
-import { BatQuaiIconNoBg } from "@/app/assets/svgs";
+import { BatQuaiIconNoBg, ErrorIcon, LoadingIcon } from "@/app/assets/svgs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { DEFAULT_VALUES } from "./constants";
 import { signUpSchema } from "./signup.validation";
 import { signup } from "./actions";
+import { useState } from "react";
 
 const SignUp = () => {
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -25,14 +26,19 @@ const SignUp = () => {
     defaultValues: DEFAULT_VALUES,
   });
 
+  const [error, setError] = useState<string>("");
+
   const {
     handleSubmit,
     control,
     formState: { isLoading, isValid },
   } = form;
 
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
-    signup(values);
+  async function onSubmit(values: z.infer<typeof signUpSchema>) {
+    const { message } = (await signup(values)) ?? {};
+    if (message) {
+      setError(message);
+    }
   }
 
   return (
@@ -47,6 +53,12 @@ const SignUp = () => {
         <div className="max-w-5xl flex items-center py-14 w-full justify-end">
           <div className="p-[30px] bg-white rounded-[10px] max-w-[400px] w-full flex flex-col gap-[30px]">
             <h1 className="font-semibold text-xl">Đăng ký</h1>
+            {error && (
+              <div className="bg-red-100 p-2 text-red-400 text-sm outline-dashed outline-red-400 outline-1 flex items-center gap-2">
+                <ErrorIcon className="text-red-400" />
+                {error}
+              </div>
+            )}
             <Form {...form}>
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -107,7 +119,11 @@ const SignUp = () => {
                   className="bg-red-extra-dark h-10 w-full"
                   disabled={!isValid}
                 >
-                  Đăng ký
+                  {isLoading ? (
+                    <LoadingIcon className="animate-spin" />
+                  ) : (
+                    "Đăng ký"
+                  )}
                 </Button>
               </form>
             </Form>

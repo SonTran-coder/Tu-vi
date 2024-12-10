@@ -1,6 +1,6 @@
 "use client";
 
-import { BatQuaiIconNoBg } from "@/app/assets/svgs";
+import { BatQuaiIconNoBg, ErrorIcon, LoadingIcon } from "@/app/assets/svgs";
 import { signInSchema } from "./signin.validation";
 import { z } from "zod";
 import { DEFAULT_VALUES } from "./constants";
@@ -17,6 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { signup } from "@/app/auth/signup/actions";
+import { signin } from "@/app/auth/signin/actions";
 
 const SignIn = () => {
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -24,9 +27,21 @@ const SignIn = () => {
     defaultValues: DEFAULT_VALUES,
   });
 
-  function onSubmit(values: z.infer<typeof signInSchema>) {
-    console.log(values);
+  const [error, setError] = useState<string>("");
+
+  const {
+    handleSubmit,
+    control,
+    formState: { isLoading },
+  } = form;
+
+  async function onSubmit(values: z.infer<typeof signInSchema>) {
+    const { message } = (await signin(values)) ?? {};
+    if (message) {
+      setError(message);
+    }
   }
+
   return (
     <div className="flex flex-col items-center">
       <div className="max-w-5xl w-full h-[84px] flex items-center gap-2">
@@ -39,13 +54,19 @@ const SignIn = () => {
         <div className="max-w-5xl flex items-center py-14 w-full justify-end">
           <div className="p-[30px] bg-white rounded-[10px] max-w-[400px] w-full flex flex-col gap-[30px]">
             <h1 className="font-semibold text-xl">Đăng nhập</h1>
+            {error && (
+              <div className="bg-red-100 p-2 text-red-400 text-sm outline-dashed outline-red-400 outline-1 flex items-center gap-2">
+                <ErrorIcon className="text-red-400" />
+                {error}
+              </div>
+            )}
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-[30px]"
               >
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
@@ -61,7 +82,7 @@ const SignIn = () => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>
@@ -82,7 +103,11 @@ const SignIn = () => {
                     type="submit"
                     className="bg-red-extra-dark h-10 w-full"
                   >
-                    Đăng nhập
+                    {isLoading ? (
+                      <LoadingIcon className="animate-spin" />
+                    ) : (
+                      "Đăng nhập"
+                    )}
                   </Button>
                   <Link href={"/"} className="text-xs my-[10px]">
                     Quên mật khẩu

@@ -1,8 +1,9 @@
+"use server";
 import "server-only";
 
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
@@ -27,6 +28,7 @@ export async function decrypt(session: string | Uint8Array) {
     });
     return payload;
   } catch (error) {
+    console.error("Error decrypting session:", error);
     return null;
   }
 }
@@ -42,14 +44,15 @@ export async function createSession(userId: string) {
     path: "/",
     expires: expires,
   });
-  redirect("/");
+
+  redirect("/", RedirectType.push);
 }
 
 export async function verifySession() {
   const cookie = cookies().get(cookieVar.name)?.value;
   const session = await decrypt(cookie ?? "");
   if (!session?.userId) {
-    redirect("/signin");
+    redirect(`/signin`);
   }
 
   return { userId: session?.userId };
