@@ -29,7 +29,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <div className="h-[60px] bg-red-extra-dark flex items-center justify-center fixed top-0  w-full">
+    <div className="h-[60px] bg-red-extra-dark flex items-center justify-center fixed top-0 w-full">
       <div className="flex items-center justify-between max-w-5xl w-full">
         <BatQuaiIcon className="w-10 h-10 hover:cursor-pointer" />
         <div className="flex gap-10 items-center">
