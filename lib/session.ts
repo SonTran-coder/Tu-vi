@@ -37,7 +37,7 @@ export async function createSession(userId: string) {
   const expires = new Date(Date.now() + cookieVar.duration);
   const session = await encrypt({ userId, expires });
 
-  cookies().set(cookieVar.name, session, {
+  (await cookies()).set(cookieVar.name, session, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
@@ -47,18 +47,17 @@ export async function createSession(userId: string) {
 
   redirect("/", RedirectType.push);
 }
-
 export async function verifySession() {
-  const cookie = cookies().get(cookieVar.name)?.value;
+  const cookie = (await cookies()).get(cookieVar.name)?.value;
   const session = await decrypt(cookie ?? "");
   if (!session?.userId) {
-    redirect(`/signin`);
+    redirect("/auth/signin");
   }
 
   return { userId: session?.userId };
 }
 
 export async function deleteSession() {
-  cookies().delete(cookieVar.name);
-  redirect("/signin");
+  (await cookies()).delete(cookieVar.name);
+  redirect("/auth/signin");
 }

@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { signup } from "@/app/auth/signup/actions";
 import { signin } from "@/app/auth/signin/actions";
 
 const SignIn = () => {
