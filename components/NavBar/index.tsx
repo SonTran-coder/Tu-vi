@@ -42,7 +42,7 @@ const NavBar = () => {
         </div>
         {name ? (
           <div className="flex items-center gap-1 group cursor-pointer relative">
-            <p className="text-white capitalize">{name}</p>
+            <p className="text-white capitalize font-semibold">{name}</p>
             <ArrowDownIcon className="h-4 w-4 text-white transform transition-transform group-hover:rotate-180" />
             <div className="absolute top-[120%] min-w-full right-0 rounded-[10px] overflow-hidden bg-white shadow-lg scale-y-0 transform transition-all group-hover:opacity-100 group-hover:scale-y-100 flex flex-col items-start">
               <p className="text-nowrap py-3 px-4 hover:bg-red-more-dark/20 w-full text-sm">

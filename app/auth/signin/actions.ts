@@ -16,7 +16,6 @@ export async function signin(formData: { [x: string]: string }) {
   if (!existingUser) {
     return { message: "Please check username or password again" };
   }
-  console.log(existingUser);
 
   // Check password matches
   const hashedPassword = existingUser.password;

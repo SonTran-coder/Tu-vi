@@ -10,6 +10,7 @@ import { cookies } from "next/headers";
 export const getUser = async () => {
   // Verify user's session
   const cookie = (await cookies()).get("session")?.value;
+  if (!cookie) return null;
   const session = await decrypt(cookie ?? "");
 
   // Connect to MongoDB

@@ -9,21 +9,20 @@ export const formSchema = z
     year: z.string(),
     hour: z.string(),
     mins: z.string(),
-    amLich: z.any().optional(),
-    namXem: z.string(),
-    dateTime: z.date(),
+    isLunar: z.boolean(),
+    viewedYear: z.string(),
   })
   .superRefine((data, ctx) => {
-    if (Number(data.namXem) < Number(data.year)) {
+    if (Number(data.viewedYear) < Number(data.year)) {
       ctx.addIssue({
-        path: ["namXem"],
+        path: ["viewedYear"],
         code: z.ZodIssueCode.custom,
         message: "Năm xem phải lớn hơn năm sinh",
       });
     }
-    if (Number(data.namXem) - 120 > Number(data.year)) {
+    if (Number(data.viewedYear) - 120 > Number(data.year)) {
       ctx.addIssue({
-        path: ["namXem"],
+        path: ["viewedYear"],
         code: z.ZodIssueCode.custom,
         message: `Năm xem không hợp lệ`,
       });

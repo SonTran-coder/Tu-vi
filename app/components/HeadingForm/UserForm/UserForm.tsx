@@ -1,22 +1,15 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { date, z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import FormFieldItem from "@/components/Field/Field";
 import { formSchema } from "@/app/components/HeadingForm/UserForm/UserForm.validation";
 import { fields } from "@/app/components/HeadingForm/UserForm/constants";
+import FormFieldItem from "@/components/Field/Field";
+import { Button } from "@/components/ui/button";
+import { Form, FormField } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const MainForm = () => {
   const searchParams = useSearchParams();
@@ -29,7 +22,7 @@ const MainForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
+    defaultValues: { ...defaultValues},
   });
 
   const createQueryString = useCallback(
@@ -40,10 +33,10 @@ const MainForm = () => {
       }
       return params.toString();
     },
-    [searchParams],
+    [searchParams]
   );
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit, control, setValue } = form;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
@@ -52,7 +45,7 @@ const MainForm = () => {
       // const response: UserDataResponse = await submitUserInfoForm({
       //   ...data,
       //   gender: data.gender === "Nữ" ? "0" : "1",
-      //   duongLich: !data.amLich,
+      //   duongLich: !data.isLunar,
       // });
       // setUserData(response);
       // setSearchUserData(data);
@@ -74,13 +67,17 @@ const MainForm = () => {
                 render={({ field }) => (
                   <FormFieldItem
                     item={{ ...item, type: item.type }}
-                    value={field.value || item.defaultValue}
+                    value={field.value || ""}
                     onChange={field.onChange}
-                    className="bg-white"
+                    className="bg-white "
+                    setValue={setValue}
                   />
                 )}
               />
             ))}
+          </div>
+          <div className="flex w-full justify-center mt-4">
+            <Button type="submit">Submit</Button>
           </div>
         </form>
       </Form>

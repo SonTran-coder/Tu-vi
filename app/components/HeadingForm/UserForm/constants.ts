@@ -7,7 +7,6 @@ export const fields: FormFieldProps[] = [
     placeholder: "Họ và tên",
     name: "name",
     type: "text",
-    className: "h-5",
   },
   {
     label: "Giới tính",
@@ -25,8 +24,8 @@ export const fields: FormFieldProps[] = [
     name: "day",
     type: "select",
     options: generateArray(1, 31).map((day) => ({
-      value: day.toString(),
-      label: day.toString(),
+      value: day,
+      label: day,
     })),
     className: "col-start-1",
   },
@@ -36,15 +35,19 @@ export const fields: FormFieldProps[] = [
     name: "month",
     type: "select",
     options: generateArray(1, 12).map((month) => ({
-      value: month.toString(),
-      label: month.toString(),
+      value: month,
+      label: month,
     })),
   },
   {
     label: "Năm sinh",
     placeholder: "Năm sinh",
     name: "year",
-    type: "datepicker",
+    type: "combobox",
+    options: generateArray(1900, new Date().getFullYear()).map((year) => ({
+      value: year,
+      label: year,
+    })),
   },
   {
     label: "Giờ sinh",
@@ -52,8 +55,8 @@ export const fields: FormFieldProps[] = [
     name: "hour",
     type: "select",
     options: generateArray(0, 23).map((hour) => ({
-      value: hour.toString(),
-      label: hour.toString(),
+      value: hour,
+      label: hour,
     })),
   },
   {
@@ -62,24 +65,23 @@ export const fields: FormFieldProps[] = [
     name: "mins",
     type: "select",
     options: generateArray(0, 59).map((minute) => ({
-      value: minute.toString(),
-      label: minute.toString(),
+      value: minute,
+      label: minute,
     })),
   },
   {
     label: "Năm xem",
     placeholder: "Năm xem",
-    name: "namXem",
-    type: "select",
+    name: "viewedYear",
+    type: "combobox",
     options: generateArray(1900, new Date().getFullYear()).map((year) => ({
-      value: year.toString(),
-      label: year.toString(),
+      value: year,
+      label: year,
     })),
-    defaultValue: new Date().getFullYear().toString(),
   },
   {
     label: "Xem theo lịch âm",
-    name: "amLich",
+    name: "isLunar",
     type: "checkbox",
     className: "col-start-1 h-fit col-span-3",
     labelStyle: `font-medium text-xs sm:text-base px-0`,

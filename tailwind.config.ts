@@ -60,6 +60,9 @@ const config: Config = {
           "more-dark": "#982B1C",
           "extra-dark": "#800000",
         },
+        gray: {
+          text: "#aaaaaa",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
