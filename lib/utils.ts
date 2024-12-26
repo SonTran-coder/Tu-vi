@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { Readable } from "stream";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -32,3 +33,17 @@ export const generateArray = (start: number, end: number): number[] => {
   if (start > end) return [];
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 };
+
+export async function decodeReadableStream(stream: ReadableStream<Uint8Array>): Promise<Record<string, string>> {
+  const reader = stream.getReader();
+  let rawData = '';
+
+  while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      rawData += new TextDecoder().decode(value); // Decode the chunks to a string
+  }
+
+  const params = new URLSearchParams(rawData);
+  return Object.fromEntries(params.entries()) as Record<string, string>;
+}

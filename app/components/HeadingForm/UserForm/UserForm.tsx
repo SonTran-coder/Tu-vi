@@ -10,6 +10,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { UserDataResponse } from "./UserForm.types";
 
 const MainForm = () => {
   const searchParams = useSearchParams();
